@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TaskFlow | Docker To-Do App</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <div class="logo">✓ TaskFlow</div>
+        <p>Organize your day, one task at a time.</p>
+    </header>
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <h2>{{ total }}</h2>
+            <p>Total Tasks</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ completed }}</h2>
+            <p>Completed</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>{{ total - completed }}</h2>
+            <p>Remaining</p>
+        </div>
+
+    </section>
+
+    <main class="task-section">
+
+        <h2>My Tasks</h2>
+
+        <form action="{{ url_for('main.add_task') }}"
+              method="POST" class="add-form">
+
+            <input type="text"
+                   name="title"
+                   placeholder="What do you need to do?"
+                   maxlength="200"
+                   required>
+
+            <button type="submit">+ Add Task</button>
+
+        </form>
+
+        <div class="task-list">
+
+            {% for task in tasks %}
+
+            <div class="task-item">
+
+                <form action="{{ url_for('main.toggle_task', task_id=task.id) }}"
+                      method="POST">
+
+                    <button class="check-btn" type="submit">
+                        {% if task.completed %}
+                            ✓
+                        {% else %}
+                            ○
+                        {% endif %}
+                    </button>
+
+                </form>
+
+                <span class="{% if task.completed %}completed{% endif %}">
+                    {{ task.title }}
+                </span>
+
+                <form action="{{ url_for('main.delete_task', task_id=task.id) }}"
+                      method="POST">
+
+                    <button class="delete-btn" type="submit">
+                        Delete
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+                <div class="empty-icon">📝</div>
+                <h3>No tasks yet!</h3>
+                <p>Add your first task to get started.</p>
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </main>
+
+    <footer>
+        Built with Flask, PostgreSQL and Docker.
+    </footer>
+
+</div>
+
+</body>
+</html>
