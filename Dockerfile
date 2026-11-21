@@ -24,4 +24,6 @@ USER appuser
 EXPOSE 5000
 
 # Start application using Gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "2", "app:create_app()"]
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "1", "app:create_app()"]
+
